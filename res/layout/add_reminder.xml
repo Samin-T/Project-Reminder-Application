@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Medicine Name TextField-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/med_name"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Medication Name"
+        app:layout_constraintBottom_toTopOf="@+id/addReminder"
+        app:layout_constraintEnd_toStartOf="@+id/right_margin"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/left_margin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.067">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Description TextField-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/med_desc"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Description"
+        app:layout_constraintBottom_toTopOf="@+id/addReminder"
+        app:layout_constraintEnd_toStartOf="@+id/right_margin"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/left_margin"
+        app:layout_constraintTop_toBottomOf="@+id/med_name"
+        app:layout_constraintVertical_bias="0.03">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Time -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/med_time"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Time"
+        app:layout_constraintBottom_toTopOf="@+id/addReminder"
+        app:layout_constraintEnd_toStartOf="@+id/right_margin"
+        app:layout_constraintStart_toEndOf="@id/med_date"
+        app:layout_constraintTop_toBottomOf="@+id/med_desc"
+        app:layout_constraintVertical_bias="0.063">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Date -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/med_date"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:hint="Date"
+        app:layout_constraintBottom_toTopOf="@+id/addReminder"
+        app:layout_constraintEnd_toStartOf="@id/med_time"
+        app:layout_constraintStart_toStartOf="@+id/left_margin"
+        app:layout_constraintTop_toBottomOf="@+id/med_desc"
+        app:layout_constraintVertical_bias="0.063">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Add button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addReminder"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:textAllCaps="false"
+        app:backgroundTint="#1C90EA"
+        app:cornerRadius="7dp"
+        app:layout_constraintBottom_toTopOf="@+id/cancelButton"
+        app:layout_constraintEnd_toStartOf="@+id/right_margin"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/left_margin"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <!-- Cancel Button-->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancelButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        app:cornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_margin"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/left_margin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.938"
+        app:strokeColor="#E6989898" />
+
+    <!-- guidelines -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="25dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="25dp" />
+
+    <CheckBox
+        android:id="@+id/checkbox_repeating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onCheckboxClicked"
+        android:text="Repeat Daily"
+        app:layout_constraintBottom_toTopOf="@+id/addReminder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/med_date"
+        app:layout_constraintVertical_bias="0.105" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
