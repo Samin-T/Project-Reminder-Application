@@ -5,32 +5,33 @@ import android.content.SharedPreferences;
 
 public class SharedPrefManager {
 
-    private final String INTRO = "intro";
+    private final String isLoggedIn = "isLogin";
     private final String EMAIL = "USER_EMAIL";
     private final SharedPreferences sharedPreferences;
 
     public SharedPrefManager(Context context) {
-        sharedPreferences = context.getSharedPreferences("shared",
+        sharedPreferences = context.getSharedPreferences("sharedPref",
                 Context.MODE_PRIVATE);
     }
 
-    public void isLogin(boolean loginorout) {
+    public void isLogin(boolean b) {
         SharedPreferences.Editor edit = sharedPreferences.edit();
-        edit.putBoolean(INTRO, loginorout);
+        edit.putBoolean(isLoggedIn, b);
         edit.apply();
     }
 
     public boolean getIsLogin() {
-        return sharedPreferences.getBoolean(INTRO, false);
-    }
-
-    public void putEmail(String loginorout) {
-        SharedPreferences.Editor edit = sharedPreferences.edit();
-        edit.putString(EMAIL, loginorout);
-        edit.apply();
+        return sharedPreferences.getBoolean(isLoggedIn, false);
     }
 
     public String getEmail() {
         return sharedPreferences.getString(EMAIL, "");
+    }
+
+    // Email Get & Set
+    public void setEmail(String email) {
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.putString(EMAIL, email);
+        edit.apply();
     }
 }

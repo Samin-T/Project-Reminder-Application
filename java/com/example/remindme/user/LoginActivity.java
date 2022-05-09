@@ -12,8 +12,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.remindme.MainActivity;
 import com.example.remindme.databinding.ActivityLoginBinding;
+import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,7 +32,23 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         sharedPrefManager = new SharedPrefManager(this);
+
+        // Check if user is already logged in and take to MainActivity
+        if (sharedPrefManager.getIsLogin() || sharedPrefManager.getEmail().equals("OFFLINE-USER")) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            this.finish();
+        }
+
+        // Offline
+        binding.skipOffline.setOnClickListener(v -> {
+            sharedPrefManager.setEmail("OFFLINE-USER");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            this.finish();
+        });
 
         // Login
         binding.loginBtn.setOnClickListener(v -> authenticateUser());
@@ -48,29 +64,29 @@ public class LoginActivity extends AppCompatActivity {
     // Authenticate (https://google.github.io/volley/simple.html) ( I used this website to learn about volley requests )
     private void authenticateUser() {
         requestQueue = Volley.newRequestQueue(LoginActivity.this);
-        String url = "http://192.168.0.81/S/reminder/api/login.php";
+        String url = "http://192.168.0.81/remindme/api//login.php";
 
-        final String email = Objects.requireNonNull(binding.emailField.getText()).toString().trim();
+        final String email = Objects.requireNonNull(binding.emailAddress.getText()).toString().trim();
         final String password = Objects.requireNonNull(binding.passwordField.getText()).toString().trim();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     requestQueue.getCache().clear();
-                    Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
 
                     try {
                         JSONObject jsonObject = new JSONObject(response);
 
                         if (jsonObject.getString("status").equals("true")) {
-
                             // Login
-                            userLogin(response);
+                            sharedPrefManager.isLogin(true);
+                            sharedPrefManager.setEmail(jsonObject.getString("email"));
 
-                            Toast.makeText(LoginActivity.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             LoginActivity.this.finish();
+                        } else {
+                            Snackbar.make(findViewById(android.R.id.content), jsonObject.getString("message"), Snackbar.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -81,29 +97,9 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("email", email);
                 params.put("password", password);
-
                 return params;
             }
         };
         requestQueue.add(stringRequest);
     }
-
-    // Login User
-    private void userLogin(String response) {
-
-        sharedPrefManager.isLogin(true);
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            if (jsonObject.getString("status").equals("true")) {
-                JSONArray jsonArray = jsonObject.getJSONArray("data");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject dataobj = jsonArray.getJSONObject(i);
-                    sharedPrefManager.putEmail(dataobj.getString("email"));
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

@@ -15,7 +15,6 @@ import com.example.remindme.MainActivity;
 import com.example.remindme.databinding.ActivityRegisterBinding;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,16 +49,22 @@ public class RegisterActivity extends AppCompatActivity {
     private void registerMe() {
 
         requestQueue = Volley.newRequestQueue(RegisterActivity.this);
-        String url = "http://192.168.0.81/S/reminder/api/register.php";
+        String url = "http://192.168.0.81/remindme/api/register.php";
 
-        final String email = Objects.requireNonNull(binding.emailField.getText()).toString();
-        final String phone = Objects.requireNonNull(binding.phoneField.getText()).toString();
+        final String email = Objects.requireNonNull(binding.emailAddress.getText()).toString();
         final String password = Objects.requireNonNull(binding.passwordField.getText()).toString();
+        final String cPassword = Objects.requireNonNull(binding.confirmPasswordField.getText()).toString();
 
 
         if (TextUtils.isEmpty(email)) {
-            binding.emailField.setError("Email is required");
+            binding.emailField.setError("email is required");
             binding.emailField.requestFocus();
+            return;
+        }
+
+        if (!cPassword.equals(password)) {
+            binding.confirmPasswordField.setError("passwords do not match");
+            binding.confirmPasswordField.requestFocus();
             return;
         }
 
@@ -70,23 +75,15 @@ public class RegisterActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(response);
 
                         if (jsonObject.optString("status").equals("true")) {
-                            saveInfo(response);
-                            Toast.makeText(RegisterActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                            sharedPrefManager.isLogin(true);
+                            sharedPrefManager.setEmail(jsonObject.optString("email"));
+
                             Intent intent = new Intent(this, MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             this.finish();
                         } else {
-
-                            if (jsonObject.getString("message").equals("Username already exist!")) {
-                                binding.emailField.setError("email provided already exists");
-                            }
-
-                            if (jsonObject.getString("message").equals("Parameter missing!")) {
-                                Snackbar.make(findViewById(android.R.id.content), "Please fill in all the fields", Snackbar.LENGTH_LONG).show();
-                            }
-
-                            //Toast.makeText(RegisterActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(android.R.id.content), jsonObject.getString("message"), Snackbar.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -97,28 +94,10 @@ public class RegisterActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("email", email);
-                params.put("phoneNumber", phone);
                 params.put("password", password);
                 return params;
             }
         };
         requestQueue.add(stringRequest);
-    }
-
-
-    private void saveInfo(String response) {
-        sharedPrefManager.isLogin(true);
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            if (jsonObject.getString("status").equals("true")) {
-                JSONArray dataArray = jsonObject.getJSONArray("data");
-                for (int i = 0; i < dataArray.length(); i++) {
-                    JSONObject dataobj = dataArray.getJSONObject(i);
-                    sharedPrefManager.putEmail(dataobj.getString("email"));
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }
