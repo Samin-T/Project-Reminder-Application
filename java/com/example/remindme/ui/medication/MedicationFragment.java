@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,25 +14,40 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.remindme.databinding.FragmentMedicationBinding;
 import com.example.remindme.offline.AddReminder;
 import com.example.remindme.offline.RecyclerAdapter;
 import com.example.remindme.offline.Reminders;
 import com.example.remindme.offline.reminderDB;
+import com.example.remindme.online.AddOnlineReminder;
+import com.example.remindme.online.Reminder;
+import com.example.remindme.online.ReminderAdapter;
 import com.example.remindme.user.SharedPrefManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MedicationFragment extends Fragment {
 
-    private MedicationViewModel homeViewModel;
+    List<Reminder> reminderList;
+    RecyclerView recyclerView;
+    private MedicationViewModel medicationViewModel;
     private FragmentMedicationBinding binding;
     private SharedPrefManager sharedPrefManager;
     private LottieAnimationView lottieAnimationView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        MedicationViewModel medicationViewModel =
+        medicationViewModel =
                 new ViewModelProvider(this).get(MedicationViewModel.class);
 
         binding = FragmentMedicationBinding.inflate(inflater, container, false);
@@ -66,8 +80,20 @@ public class MedicationFragment extends Fragment {
             });
 
         } else {
-            Log.i("ONLINE REMINDER", "SET");
+            recyclerView = binding.recyclerView;
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            reminderList = new ArrayList<>();
+            listRemindersOnline();
+
+            // Add new reminder
+            binding.createReminder.setOnClickListener(view -> {
+                Intent intent = new Intent(getContext(), AddOnlineReminder.class);
+                startActivity(intent);
+            });
         }
+
         return root;
     }
 
@@ -75,5 +101,55 @@ public class MedicationFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void listRemindersOnline() {
+        String URL_REMINDERS = "http://192.168.0.81/remindme/api/listreminders.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REMINDERS,
+                response -> {
+                    try {
+                        //converting the string to json array object
+                        JSONArray jsonArray = new JSONArray(response);
+
+                        //traversing through all the object
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            //getting product object from json array
+                            JSONObject reminders = jsonArray.getJSONObject(i);
+
+                            //adding the product to product list
+                            reminderList.add(new Reminder(
+                                    reminders.getInt("reminder_id"),
+                                    reminders.getString("med_name"),
+                                    reminders.getString("med_desc"),
+                                    reminders.getString("date"),
+                                    reminders.getString("time"),
+                                    reminders.getString("isRepeating"),
+                                    reminders.getString("user_email"),
+                                    reminders.getString("hcw_email")
+                            ));
+                        }
+
+                        if (reminderList.size() > 0) {
+                            lottieAnimationView.setVisibility(View.GONE);
+                        }
+
+                        //creating adapter object and setting it to recyclerview
+                        ReminderAdapter adapter = new ReminderAdapter(getActivity(), reminderList);
+                        recyclerView.setAdapter(adapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Log.e("ERROR:", error.toString())) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", sharedPrefManager.getEmail());
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(requireActivity()).add(stringRequest);
     }
 }

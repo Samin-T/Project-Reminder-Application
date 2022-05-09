@@ -29,20 +29,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".user.RegisterActivity" />
-
         <activity android:name=".offline.EditReminder" />
-
+        <activity android:name=".user.RegisterActivity" />
         <activity android:name=".offline.AddReminder" />
-
-
+        <activity android:name=".online.AddOnlineReminder" />
+        <activity android:name=".online.EditOnlineReminder" />
         <activity android:name=".history.HistoryActivity" />
 
         <!--Receivers-->
         <receiver android:name=".alarm.AlarmReceiver" />
         <receiver android:name=".alarm.TakeReceiver" />
         <receiver android:name=".alarm.DismissReceiver" />
-
+        <receiver android:name=".WaterReceiver" />
 
         <!--Boot Receiver-->
         <receiver
