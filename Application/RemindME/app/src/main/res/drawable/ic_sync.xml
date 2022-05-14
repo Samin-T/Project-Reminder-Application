@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,15.93a1,1,0,0,0-1,1C27,22.48,22.07,27,16,27S5,22.48,5,16.93,9.93,6.86,16,6.86a11.45,11.45,0,0,1,8.51,3.72l-6.12-1.3a1,1,0,1,0-0.41,2L26.5,13l0.21,0a1,1,0,0,0,0.62-0.22,1,1,0,0,0,0.38-0.76L27.91,4a1,1,0,0,0-1-1,1,1,0,0,0-1,1l-0.12,5A13.55,13.55,0,0,0,16,4.86c-7.17,0-13,5.41-13,12.07S8.83,29,16,29s13-5.42,13-12.07A1,1,0,0,0,28,15.93Z" />
+</vector>
+
+<!-- Icon from https://www.svgrepo.com/svg/381897/refresh-reload-sync -->
