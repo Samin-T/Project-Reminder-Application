@@ -10,7 +10,7 @@ if (isset($_POST['register'])) {
         echo "passwords do not match";
     } else {
 
-        if ($_POST['password'] != '' || $_POST['email'] != '' || $_POST['name'] != '') {
+        if ($_POST['password'] != '' && $_POST['email'] != '' && $_POST['name'] != '') {
 
             // Email Check
             $email = "SELECT * FROM hcw WHERE `email` = '" . $_POST["email"] . "' LIMIT 1";
