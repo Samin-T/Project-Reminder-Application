@@ -91,7 +91,7 @@ if ($result->num_rows > 0) {
                     <form method="POST" action="REMINDER/add.php">
                         <div class="mb-1">
                             <label for="medication-name" class="col-form-label">Medication Name:</label>
-                            <input type="text" class="form-control" id="medication-name" name="MedName">
+                            <input type="text" class="form-control" id="medication-name" name="MedName" required>
                         </div>
                         <div class="mb-1">
                             <label for="description-text" class="col-form-label">Description:</label>
@@ -99,15 +99,15 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="mb-1">
                             <label for="medication-date" class="col-form-label">Date:</label>
-                            <input id="datepicker" type="text" class="form-control" placeholder="dd/mm/yyyy" id="medication-date" name="MedDate">
+                            <input id="datepicker" type="text" class="form-control" placeholder="dd/mm/yyyy" id="medication-date" name="MedDate" required>
                         </div>
                         <div class="mb-1">
                             <label for="medication-time" class="col-form-label">Time:</label>
-                            <input type="time" class="form-control" placeholder="--:--" id="medication-time" name="MedTime">
+                            <input type="time" class="form-control" placeholder="--:--" id="medication-time" name="MedTime" required>
                         </div>
                         <div class="mb-1">
                             <label for="user-email" class="col-form-label">User Email:</label>
-                            <input type="text" class="form-control" placeholder="name@example.com" id="user-email" name="UserEmail">
+                            <input type="text" class="form-control" placeholder="name@example.com" id="user-email" name="UserEmail" required>
                         </div>
                         <div class="form-check mb-1">
                             <input name="repeat" class="form-check-input" type="checkbox" id="flexCheckDefault" onchange="isRepeating(this)">
