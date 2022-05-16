@@ -165,7 +165,7 @@ if ($result->num_rows > 0) {
                             <br>
                             <b>User Email: </b><?php echo $row["user_email"]; ?>
                             <br>
-                            <b>Date: </b><?php echo $row["date"]; ?> | <b>Time: </b><?php echo $row["time"]; ?> | <b>Repeat Daily: </b><?php echo $row["isRepeating"]; ?>
+                            <b>Date: </b><?php echo $row["date"]; ?> | <b>Time: </b><?php echo $row["time"]; ?> | <b>Daily Repeatig: </b><?php echo $row["isRepeating"]; ?>
                         </div>
                         <a href="REMINDER/edit.php?id=<?php echo $row["reminder_id"]; ?>" class="me-2">Edit</a>
                         <a href="REMINDER/delete.php?id=<?php echo $row["reminder_id"]; ?>" class="me-2">Delete</a>
